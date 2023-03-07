@@ -11,7 +11,8 @@ PubSub1Cidr: 172.20.4.0/24
 PubSub1Cidr: 172.20.5.0/24
 PubSub1Cidr: 172.20.6.0/24
 
-# Region vpc_nameregion: "us-east-2"
+# Region Name
+region: "us-east-2"
 
 # Zone Names
 zone1: us-east-2a

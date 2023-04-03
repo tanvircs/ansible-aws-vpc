@@ -5,9 +5,9 @@
     - name: Import VPC Variable
       include_vars: vars/vpc_setup
 
-    - name: Create tanvir vpc
+    - name: Create Tanvir VPC
       ec2_vpc_net:
-        name: "{{vpc_setup}}"
+        name: "{{vpc_name}}"
         cidr_block: "{{vpcCidr}}"
         region: "{{region}}"
         dns_support: yes

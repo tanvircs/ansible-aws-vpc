@@ -1,5 +1,5 @@
 ---
-- name: Setup Tanvir Bastion Host
+- name: Setup Vprofile Bastion Host
   hosts: localhost
   connection: local
   gather_facts: no
@@ -10,22 +10,23 @@
     - name: Import VPC setup Variable
       include_vars: vars/output_vars
 
-    - name: Create Tanvir ec2 key
+    - name: Create tanvir ec2 key
       ec2_key:
         name: tanvir-key
         region: "{{region}}"
       register: key_out
 
+
     - name: Save private key into file bastion-key.pem
       copy:
         content: "{{key_out.key.private_key}}"
         dest: "./bastion-key.pem"
-        node: 0600
+        mode: 0600
       when: key_out.changed
 
-    - name: Create SG for Bastion Host
+    - name: Create Sec Grp for bastion host
       ec2_group:
-        content: Bastion-host-sg
+        name: Bastion-host-sg
         description: Allow port 22 from everywhere and all port within sg
         region: "{{region}}"
         vpc_id: "{{vpcid}}"
@@ -34,25 +35,25 @@
             from_port: 22
             to_port: 22
             cidr_ip: "{{MYIP}}"
-          register: BastionSG_out
+      register: BastionSG_out
 
-     - name: Creating Bastion Host
-       ec2:
-         key_name: tanvir-key
-         region: "{{region}}"
-         instance_type: t2.micro
-         image: "{{ bastion_ami }}"
-         wait: yes
-         wait_timeout: 300
-         instance_tags:
-           Name: "Bastion_host"
-           Project: Tanvir
-           Owner: DevOps Team
-         exact_count: 1
-         count_tag:
-           Name: "Bastion_host"
-           Project: Tanvir
-           Owner: DevOps Team
-         group_id: "{{BastionSG_out.group_id}}"
-         vpc_subnet_id: "{{pubsub1id}}"
-       register: bastionHost_out
+    - name: Creating Bastion Host
+      ec2:
+        key_name: tanvir-key
+        region: "{{region}}"
+        instance_type: t2.micro
+        image: "{{ bastion_ami }}"
+        wait: yes
+        wait_timeout: 300
+        instance_tags:
+          Name: "Bastion_host"
+          Project: Tanvir
+          Owner: DevOps Team
+        exact_count: 1
+        count_tag:
+          Name: "Bastion_host"
+          Project: Tanvir
+          Owner: DevOps Team
+        group_id: "{{BastionSG_out.group_id}}"
+        vpc_subnet_id: "{{pubsub1id}}"
+      register: bastionHost_out

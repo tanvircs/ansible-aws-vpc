@@ -2,7 +2,7 @@
   connection: local
   gather_facts: False
   tasks:
-    - name: Import VPC Variable
+    - name: Import VPC Variables
       include_vars: vars/vpc_setup
 
     - name: Create Tanvir VPC
@@ -11,7 +11,7 @@
         cidr_block: "{{vpcCidr}}"
         region: "{{region}}"
         dns_support: yes
-        dns_hostname: yes
+        dns_hostnames: yes
         tenancy: default
         state: "{{state}}"
-      registration: vpcout
+      register: vpcout

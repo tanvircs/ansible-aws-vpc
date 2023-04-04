@@ -91,3 +91,12 @@
           Name: tanvir-privsub3
       register: privsub3_out
 
+    - name: Internet Gateway Setup
+      ec2_vpc_igw:
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{ region }}"
+        state: "{{ state }}"
+        resource_tags:
+          Name: tanvir-IGW
+      register: igw_out
+

@@ -115,26 +115,26 @@
             gateway_id: "{{igw_out.gateway_id}}"
       register: pubRT_out
 
-    - name: Create a new nat gateway and allocate new EIP if a nat gateway does not yet exist
+    - name: Create new nat gateway and allocate new EIP if a nat gateway does not yet exist in the subnet.
       ec2_vpc_nat_gateway:
-        vpc_id: "{{pubsub1_out.subnet.id}}"
-        region: "{{region}}"
         state: "{{state}}"
+        subnet_id: "{{ pubsub1_out.subnet.id }}"
         wait: yes
+        region: "{{ region }}"
         if_exist_do_not_create: true
       register: NATGW_out
 
-    - name: Set up private subnet route table
+    - name: Set up Private subnet route table
       ec2_vpc_route_table:
         vpc_id: "{{vpcout.vpc.id}}"
-        region: "{{region}}"
+        region: "{{ region }}"
         tags:
           Name: Tanvir_PrivRT
         subnets:
-          - "{{privsub1_out.subnet.id}}"
-          - "{{privsub1_out.subnet.id}}"
-          - "{{privsub1_out.subnet.id}}"
+          - "{{ privsub1_out.subnet.id }}"
+          - "{{ privsub2_out.subnet.id }}"
+          - "{{ privsub3_out.subnet.id }}"
         routes:
           - dest: 0.0.0.0/0
-            gateway_id: "{{NATGW_out.nat_gateway_id}}"
+            gateway_id: "{{ NATGW_out.nat_gateway_id }}"
       register: privRT_out

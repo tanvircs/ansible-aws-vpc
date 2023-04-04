@@ -16,8 +16,8 @@
         state: "{{state}}"
       register: vpcout
 
-    - debug:
-        var: vpcout
+#    - debug:
+#        var: vpcout
 
     - name: create Public Subnet 1 in Zone1
       ec2_vpc_subnet:
@@ -30,3 +30,27 @@
         resource_tags:
           Name: tanvir-pubsub1
       register: pubsub1_out
+
+    - name: create Public Subnet 2 in Zone2
+      ec2_vpc_subnet:
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{ region}}"
+        az: "{{ zone2 }}"
+        state: "{{state}}"
+        cidr: "{{ PubSub2Cidr }}"
+        map_public: yes
+        resource_tags:
+          Name: tanvir-pubsub2
+      register: pubsub2_out
+
+    - name: create Public Subnet 3 in Zone3
+      ec2_vpc_subnet:
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{ region}}"
+        az: "{{ zone3 }}"
+        state: "{{state}}"
+        cidr: "{{ PubSub3Cidr }}"
+        map_public: yes
+        resource_tags:
+          Name: tanvir-pubsub3
+      register: pubsub3_out
